@@ -1,2 +1,2 @@
 # CS436_Project
-Chatroom project
+Project in Introduction to Network Programming
