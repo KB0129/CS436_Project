@@ -9,7 +9,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # server bind to loacl hose, port = 18000
 # server should be 'listening mode" to connection
-server.bind(host, port)
+server.bind((host, port))
 server.listen()
 
 # put the clients, nicknames on list
@@ -37,11 +37,11 @@ def handle(client):
             break
 
 # receive information from client.py
-def recieve():
+def receive():
     while True:
         # server always accept client
         client, address = server.accept()
-        print(f"Connection with {str.address}")
+        print(f"Connection with {str(address)}")
 
         # recieve nickname and client from client.py
         client.send('NICK'.encode('ascii'))
@@ -58,4 +58,4 @@ def recieve():
 
 # main
 print("Sever is Listening")
-recieve()
+receive()
