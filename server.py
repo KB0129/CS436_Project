@@ -9,8 +9,9 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # server bind to loacl hose, port = 18000
 # server should be 'listening mode" to connection
+# listeners for 3 active connections. 
 server.bind((host, port))
-server.listen()
+server.listen(3)
 
 # put the clients, nicknames on list
 clients = []
@@ -57,5 +58,5 @@ def receive():
         thread.start()
 
 # main
-print("Sever is Listening")
+print("Sever is now on. Listening...")
 receive()
