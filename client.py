@@ -28,39 +28,42 @@ def write():
         message = f'{nickname}: {input("")}'
         client.send(message.encode('ascii'))
 
-# choose the option and send it to server
+# give options to user
+def giveOption(option):
+    try:
+        # if message is not empty, send it to server
+        if not option.isspace():
+            client.send(option.encode('ascii'))
+        
+        # Option 1: get the list of clients in the server
+        if option == "1":
+            print("Here is the list: ")
+            time.sleep(0.8)
+            serverSend = client.recv(1024)
+            serverList = pickle.loads(serverSend)
+        
+        # Option 2: join the chatroom
+        elif option == "2":
+            recieve_thread = threading.Thread(target=recieve)
+            recieve_thread.start()
+            write_thread = threading.Thread(target=write)
+            write_thread.start()
+
+        # Option 3: quit the chatroom
+        elif option =="3":
+            print("Leave the chatroom")
+            client.shutdown(socket.SHUT_RDWR)
+            client.close()
+    except:
+        print("Type, error!")
+        client.shutdown(socket.SHUT_RDWR)
+        client.close()        
+
 print("Choose Option:\n1.Get a report of the chatroom from the server.\n2.Request to join the chatroom.\n3.Quit the program\n")
 user_Option = input("What is your option?: ")
-    
-try:
-    # if message is not empty, send it to server
-    if not user_Option.isspace():
-        client.sendall(user_Option.encode())
-        time.sleep(1)
-    # Option 1: get the list of clients in the server
-    if user_Option == "1":
-        print("Here is the list: ")
-        time.sleep(0.8)
-        serverSend = client.recv(1024)
-        serverList = pickle.loads(serverSend)
-        
-    # Option 2: join the chatroom
-    elif user_Option == "2":
-        recieve_thread = threading.Thread(target=recieve)
-        recieve_thread.start()
-        write_thread = threading.Thread(target=write)
-        write_thread.start()
+giveOption(user_Option)
+print("\n")
 
-    # Option 3: quit the chatroom
-    elif user_Option =="3":
-        print("Leave the chatroom")
-        client.shutdown(socket.SHUT_RDWR)
-        client.close()
-    
-except:
-    print("Type, error!")
-    client.shutdown(socket.SHUT_RDWR)
-    client.close()
 
 
 
