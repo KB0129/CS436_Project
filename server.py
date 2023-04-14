@@ -22,7 +22,7 @@ def broadcast(message):
     for client in clients:
         client.send(message)
 
-#  try to show the message to the all clients
+# show the message to the all clients
 def handle(client):
     while True:
         try:
@@ -37,7 +37,7 @@ def handle(client):
             nicknames.remove(nickname)
             break
 
-# receive information from client.py
+# receive client (from client.py_
 def receive():
     while True:
         # server always accept client
