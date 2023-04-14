@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-import pickle # store python object as a file for "Option 1"
+import pickle 
 
 nickname = input("Choose your nickname: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,7 +33,7 @@ def giveOption(option):
     try:
         # if message is not empty, send it to server
         if not option.isspace():
-            client.send(option.encode('ascii'))
+            client.send(option.encode())
         
         # Option 1: get the list of clients in the server
         if option == "1":
@@ -59,12 +59,15 @@ def giveOption(option):
         client.shutdown(socket.SHUT_RDWR)
         client.close()        
 
-print("Choose Option:\n1.Get a report of the chatroom from the server.\n2.Request to join the chatroom.\n3.Quit the program\n")
+print("\nChoose Option:\n1.Get a report of the chatroom from the server.\n2.Request to join the chatroom.\n3.Quit the program\n")
 user_Option = input("What is your option?: ")
 giveOption(user_Option)
 print("\n")
 
 
-
+# recieve_thread = threading.Thread(target=recieve)
+# recieve_thread.start()
+# write_thread = threading.Thread(target=write)
+# write_thread.start()
 
     
