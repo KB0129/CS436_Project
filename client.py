@@ -2,6 +2,7 @@ import socket
 import threading
 import time
 import pickle
+from datetime import datetime
 
 nickname = input("Please enter a username: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,7 +27,11 @@ def recieve():
 def write():
     while True:
         message = f'{nickname}: {input("")}'
+        date_now = datetime.now().strftime("[%H:%M] ")
+        message = date_now + message
         client.send(message.encode('ascii'))
+           
+
 
 # give options to user
 def giveOption():
