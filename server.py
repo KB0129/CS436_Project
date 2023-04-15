@@ -1,6 +1,5 @@
 import threading
 import socket
-import pickle
 
 host = '127.0.0.1' # local host, run the server on my computer
 port = 18000

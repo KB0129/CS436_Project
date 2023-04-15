@@ -3,7 +3,7 @@ import threading
 import time
 import pickle
 
-nickname = input("Choose your nickname: ")
+nickname = input("Please enter a username: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 18000))
 
@@ -31,8 +31,8 @@ def write():
 # give options to user
 def giveOption():
     try:
-        print("\nChoose Option:\n1.Get a report of the chatroom from the server.\n2.Request to join the chatroom.\n3.Quit the program\n")
-        user_Option = input("What is your option?: ")
+        print("Please select one of the following options:\n    1.Get a report of the chatroom from the server.\n    2.Request to join the chatroom.\n    3.Quit the program")
+        user_Option = input("Your choice: ")
         
         # if message is not empty, send it to server
         if not user_Option.isspace():
@@ -61,7 +61,6 @@ def giveOption():
         client.close()        
 
 giveOption()
-print("\n")
 
 
 # recieve_thread = threading.Thread(target=recieve)
