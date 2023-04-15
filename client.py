@@ -55,11 +55,16 @@ def giveOption():
                 print("Leave the chatroom")
                 client.shutdown(socket.SHUT_RDWR)
                 client.close()
+            # wrong option case
+            else:
+                print("Wrong option, choose again.")
+                giveOption()   
     except:
-        print("Type, error!")
+        print("System Error.")
         client.shutdown(socket.SHUT_RDWR)
-        client.close()        
+        client.close()      
 
+# start client program
 giveOption()
 
 
