@@ -1,5 +1,6 @@
 import threading
 import socket
+import pickle
 
 host = '127.0.0.1' # local host, run the server on my computer
 port = 18000
@@ -33,11 +34,11 @@ def handle(client):
             clients.remove(client)
             client.close()
             nickname = nicknames[index]
-            broadcast(f'{nickname} left the chat!'.encode('ascii'))
+            broadcast(f'Server: {nickname} left the chatroom.'.encode('ascii'))
             nicknames.remove(nickname)
             break
 
-# receive client (from client.py_
+# receive client from client.py
 def receive():
     while True:
         # server always accept client
@@ -50,12 +51,14 @@ def receive():
         nicknames.append(nickname)
         clients.append(client) 
 
-        print(f'Nickname of the client is {nickname}!')
-        broadcast(f'{nickname} joined the chat!'.encode('ascii')) # show who join the chatroom
-        client.send('Connected to the server!'.encode('ascii')) # client know he/she is on the server
+        print(f'Server: Nickname of the client is {nickname}!')
+        broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
 
         thread = threading.Thread(target=handle, args=(client, ))
         thread.start()
+
+
+
 
 # main
 print("Sever is now on. Listening...")
