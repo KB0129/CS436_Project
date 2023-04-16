@@ -4,12 +4,13 @@ import time
 import pickle
 from datetime import datetime
 
-def enter_username():
+def enter():
     global nickname 
     nickname = input("Please enter a username: ")
     global client 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('127.0.0.1', 18000))
+
 
 # get message from server
 def recieve():
@@ -21,9 +22,9 @@ def recieve():
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
                 pass
-            elif message == 'Chatroom alreay full.':
-                 chat_finished2 = True
-                 break
+            elif message == 'reject':
+                print("There is already 3 users")
+                pass
             else:
                 print(message)
             if(chat_finished) or (chat_finished2):
@@ -36,9 +37,11 @@ def recieve():
 # write function to send message to chatroom
 def write():
     while True:
+        # message = f'{nickname}: {input("")}'
         message = input()
         if message.lower() == 'q':
             client.send(message.encode())
+            #write 쓰레드가 종료되어야함 + recieve 쓰레드도 종료해야함
         else:
             new_message = f'{nickname}: {message}'
             date_now = datetime.now().strftime("[%H:%M] ")
@@ -62,16 +65,18 @@ def giveOption():
             
                 # Option 2: join the chatroom
                 elif user_Option == "2":
-                    enter_username()
+                    enter()
                     global chat_finished 
                     chat_finished = False;
                     recieve_thread = threading.Thread(target=recieve)
                     recieve_thread.start()
                     while True: # same as wrtie()
+                        # message = f'{nickname}: {input("")}'
                         message = input()
                         if message.lower() == 'q':
                             client.send(message.encode())
-                            chat_finished = True; # stop Thread, return to menu again!
+                            chat_finished = True;
+                            #리시브 쓰레드 종료 후 지금 write 문을 빠져나와 다시 giveOption() 펑션의 처음부터 시작한다.
                             break 
                         else:
                             new_message = f'{nickname}: {message}'
@@ -88,18 +93,40 @@ def giveOption():
                 # wrong option case
                 else:
                     print("Wrong option, choose again.")
-                    
+                    #client_menu()
         except:
             print("System Error.")
             client.shutdown(socket.SHUT_RDWR)
             client.close()      
             return
 
-# main funtion
+    
+def chatting():
+    client_Thread()
+    
+
+
+
+"""
+def client_Thread():
+    recieve_thread = threading.Thread(target=recieve)
+    recieve_thread.start()
+    write_thread = threading.Thread(target=write)
+    write_thread.start()
+"""
 def main_function():
     giveOption()
+    
+
         
+     
 # start client program
 main_function()
+
+
+# recieve_thread = threading.Thread(target=recieve)
+# recieve_thread.start()
+# write_thread = threading.Thread(target=write)
+# write_thread.start()
 
     

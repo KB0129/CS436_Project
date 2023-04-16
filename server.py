@@ -29,7 +29,6 @@ def handle(client):
     while True:
         try:
             message = client.recv(1024).decode()
-            # if message is "q", remove user
             if message == 'q':
                 clients.remove(client)
                 break
@@ -51,18 +50,21 @@ def receive():
         # server always accept client
         if len(clients) > 3:
             print("testing if this works")
-            client.send('Chatroom already full.'.encode('ascii'))
-            chat_finished = False;
+            client.send('reject'.encode('ascii'))
+            index = clients.index(client)
+            clients.remove(client)
+            client.close()
             break
-        #clients.remove()
-        client, address = server.accept()
-        print(f"Connection with {str(address)}")
+            #clients.remove()
+        else:    
+            client, address = server.accept()
+            print(f"Connection with {str(address)}")
 
-        # recieve nickname and client from client.py
-        client.send('NICK'.encode('ascii'))
-        nickname = client.recv(1024).decode('ascii') 
-        nicknames.append(nickname)
-        clients.append(client) 
+        # recieve nickname and client from client.py python3 client.py
+            client.send('NICK'.encode('ascii'))
+            nickname = client.recv(1024).decode('ascii') 
+            nicknames.append(nickname)
+            clients.append(client) 
 
         print(f'Server:{nickname} joined the chatroom.')
         broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
