@@ -48,7 +48,6 @@ def handle(client):
 def receive():
     while True:
         # server always accept client
-        count = 0
         if len(clients) > 3:
             print("testing if this works")
             client.send('reject'.encode('ascii'))

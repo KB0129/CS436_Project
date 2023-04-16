@@ -102,8 +102,6 @@ def giveOption():
     
 def chatting():
     client_Thread()
-    
-
 
 
 """
