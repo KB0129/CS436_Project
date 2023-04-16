@@ -15,16 +15,18 @@ def enter_username():
 def recieve():
     while True:
         try:
+            global chat_finished2
+            chat_finished2 = False
             message = client.recv(1024).decode('ascii')
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
                 pass
-            elif message == 'reject':
-                print("There is already 3 users")
-                pass
+            elif message == 'Chatroom alreay full.':
+                 chat_finished2 = True
+                 break
             else:
                 print(message)
-            if(chat_finished):
+            if(chat_finished) or (chat_finished2):
                 break
         except:
             print("An error occured!")

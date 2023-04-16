@@ -51,23 +51,24 @@ def receive():
         # server always accept client
         if len(clients) > 3:
             print("testing if this works")
-            client.send('reject'.encode('ascii'))
-            #clients.remove()
-        else:    
-            client, address = server.accept()
-            print(f"Connection with {str(address)}")
+            client.send('Chatroom already full.'.encode('ascii'))
+            chat_finished = False;
+            break
+        #clients.remove()
+        client, address = server.accept()
+        print(f"Connection with {str(address)}")
 
         # recieve nickname and client from client.py
-            client.send('NICK'.encode('ascii'))
-            nickname = client.recv(1024).decode('ascii') 
-            nicknames.append(nickname)
-            clients.append(client) 
+        client.send('NICK'.encode('ascii'))
+        nickname = client.recv(1024).decode('ascii') 
+        nicknames.append(nickname)
+        clients.append(client) 
 
-            print(f'Server:{nickname} joined the chatroom.')
-            broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
+        print(f'Server:{nickname} joined the chatroom.')
+        broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
 
-            thread = threading.Thread(target=handle, args=(client, ))
-            thread.start()
+        thread = threading.Thread(target=handle, args=(client, ))
+        thread.start()
 
 # start server program
 print("Sever is now on. Listening...")
