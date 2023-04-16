@@ -51,9 +51,7 @@ def receive():
         if len(clients) > 3:
             print("testing if this works")
             client.send('reject'.encode('ascii'))
-            index = clients.index(client)
-            clients.remove(client)
-            client.close()
+            handle(client)
             break
             #clients.remove()
         else:    
@@ -66,11 +64,11 @@ def receive():
             nicknames.append(nickname)
             clients.append(client) 
 
-        print(f'Server:{nickname} joined the chatroom.')
-        broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
+            print(f'Server:{nickname} joined the chatroom.')
+            broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
 
-        thread = threading.Thread(target=handle, args=(client, ))
-        thread.start()
+            thread = threading.Thread(target=handle, args=(client, ))
+            thread.start()
 
 # start server program
 print("Sever is now on. Listening...")
