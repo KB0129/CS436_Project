@@ -2,6 +2,7 @@ import threading
 import socket
 from datetime import datetime
 
+
 host = '127.0.0.1' # local host, run the server on my computer
 port = 18000
 
@@ -27,8 +28,13 @@ def broadcast(message):
 def handle(client):
     while True:
         try:
-            message = client.recv(1024)
-            broadcast(message)
+            message = client.recv(1024).decode()
+            if message == 'q':
+                clients.remove(client)
+                break
+            else: 
+                broadcast(message.encode())
+
         except: # error while broadcasting or receiving message , remove client and its name   
             index = clients.index(client)
             clients.remove(client)
@@ -51,7 +57,7 @@ def receive():
         nicknames.append(nickname)
         clients.append(client) 
 
-        print(f'Server: Nickname of the client is {nickname}!')
+        print(f'Server:{nickname} joined the chatroom.')
         broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
 
         thread = threading.Thread(target=handle, args=(client, ))
