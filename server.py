@@ -29,7 +29,6 @@ def handle(client):
     while True:
         try:
             message = client.recv(1024).decode()
-            # if message is "q", remove user
             if message == 'q':
                 clients.remove(client)
                 break
@@ -52,12 +51,16 @@ def receive():
         if len(clients) > 3:
             print("testing if this works")
             client.send('reject'.encode('ascii'))
+            index = clients.index(client)
+            clients.remove(client)
+            client.close()
+            break
             #clients.remove()
         else:    
             client, address = server.accept()
             print(f"Connection with {str(address)}")
 
-        # recieve nickname and client from client.py
+        # recieve nickname and client from client.py python3 client.py
             client.send('NICK'.encode('ascii'))
             nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
