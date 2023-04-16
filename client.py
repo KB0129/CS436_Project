@@ -19,6 +19,9 @@ def recieve():
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
                 pass
+            elif message == 'reject':
+                print("There is already 3 users")
+                pass
             else:
                 print(message)
             if(chat_finished):
