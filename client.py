@@ -16,18 +16,19 @@ def enter():
 def recieve():
     while True:
         try:
-            global chat_finished2
-            chat_finished2 = False
             message = client.recv(1024).decode('ascii')
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
                 pass
             elif message == 'reject':
                 print("There is already 3 users")
-                pass
+                print("Program finish, Bye")
+                client.shutdown(socket.SHUT_RDWR)
+                client.close()
+                return
             else:
                 print(message)
-            if(chat_finished) or (chat_finished2):
+            if(chat_finished):
                 break
         except:
             print("An error occured!")
