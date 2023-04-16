@@ -20,12 +20,12 @@ def recieve():
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
                 pass
-            elif message == 'reject':
-                print("There is already 3 users")
-                print("Program finish, Bye")
-                client.shutdown(socket.SHUT_RDWR)
-                client.close()
-                return
+            # elif message == 'reject':
+            #     print("There is already 3 users")
+            #     print("Program finish, Bye")
+            #     client.shutdown(socket.SHUT_RDWR)
+            #     client.close()
+            #     return
             else:
                 print(message)
             if(chat_finished):
@@ -42,7 +42,6 @@ def write():
         message = input()
         if message.lower() == 'q':
             client.send(message.encode())
-            #write 쓰레드가 종료되어야함 + recieve 쓰레드도 종료해야함
         else:
             new_message = f'{nickname}: {message}'
             date_now = datetime.now().strftime("[%H:%M] ")
@@ -68,7 +67,7 @@ def giveOption():
                 elif user_Option == "2":
                     enter()
                     global chat_finished 
-                    chat_finished = False;
+                    chat_finished = False
                     recieve_thread = threading.Thread(target=recieve)
                     recieve_thread.start()
                     while True: # same as wrtie()
@@ -76,8 +75,7 @@ def giveOption():
                         message = input()
                         if message.lower() == 'q':
                             client.send(message.encode())
-                            chat_finished = True;
-                            #리시브 쓰레드 종료 후 지금 write 문을 빠져나와 다시 giveOption() 펑션의 처음부터 시작한다.
+                            chat_finished = True
                             break 
                         else:
                             new_message = f'{nickname}: {message}'

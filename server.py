@@ -48,10 +48,10 @@ def handle(client):
 def receive():
     while True:
         # server always accept client
+        count = 0
         if len(clients) > 3:
             print("testing if this works")
             client.send('reject'.encode('ascii'))
-            handle(client)
             break
             #clients.remove()
         else:    
@@ -69,6 +69,7 @@ def receive():
 
             thread = threading.Thread(target=handle, args=(client, ))
             thread.start()
+            count += 1
 
 # start server program
 print("Sever is now on. Listening...")
