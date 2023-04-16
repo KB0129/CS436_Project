@@ -29,6 +29,7 @@ def handle(client):
     while True:
         try:
             message = client.recv(1024).decode()
+            # if message is "q", remove user
             if message == 'q':
                 clients.remove(client)
                 break
@@ -54,6 +55,9 @@ def receive():
         # recieve nickname and client from client.py
         client.send('NICK'.encode('ascii'))
         nickname = client.recv(1024).decode('ascii') 
+        if nickname in nicknames:
+            broadcast(f'Server: {nickname} is already used. Please choose other name'.encode('ascii'))
+            return
         nicknames.append(nickname)
         clients.append(client) 
 
