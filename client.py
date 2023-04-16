@@ -22,6 +22,8 @@ def recieve():
                 pass
             else:
                 print(message)
+            if(chat_finished):
+                break
         except:
             print("An error occured!")
             client.close()
@@ -59,16 +61,18 @@ def giveOption():
                 # Option 2: join the chatroom
                 elif user_Option == "2":
                     enter()
+                    global chat_finished 
+                    chat_finished = False;
                     recieve_thread = threading.Thread(target=recieve)
                     recieve_thread.start()
-                    while True:
-                        
+                    while True: # same as wrtie()
                         # message = f'{nickname}: {input("")}'
                         message = input()
                         if message.lower() == 'q':
                             client.send(message.encode())
-                            recieve_thread.join()
-                            return 
+                            chat_finished = True;
+                            #리시브 쓰레드 종료 후 지금 write 문을 빠져나와 다시 giveOption() 펑션의 처음부터 시작한다.
+                            break 
                         else:
                             new_message = f'{nickname}: {message}'
                             date_now = datetime.now().strftime("[%H:%M] ")
