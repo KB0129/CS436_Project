@@ -36,6 +36,7 @@ def handle(client):
             message = client.recv(1024).decode()
             if message == 'q':
                 clients.remove(client)
+                nicknames.remove(nickname)
                 break
             elif message == 'a':
                 client.send('file'.encode())
