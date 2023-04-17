@@ -103,18 +103,6 @@ def giveOption():
             client.close()      
             return
 
-    
-def chatting():
-    client_Thread()
-
-
-"""
-def client_Thread():
-    recieve_thread = threading.Thread(target=recieve)
-    recieve_thread.start()
-    write_thread = threading.Thread(target=write)
-    write_thread.start()
-"""
 def main_function():
     giveOption()
     
