@@ -21,7 +21,7 @@ def nameEnter():
         else:
             return True #CONNECTION SUCESS AND SEATS ARE AVAILAVLE
         
-def showUser():
+def showUserList():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('127.0.0.1', 18000))
     client.send("LIST".encode())
@@ -29,8 +29,6 @@ def showUser():
     userList = client.recv(1024).decode('ascii')
     print(userList)
     client.close()
-
-
         
 def readFile():
     print("Now, we are gonna read the file.")
@@ -93,7 +91,7 @@ def giveOption():
             if not user_Option.isspace():
             # Option 1: get the list of clients in the server
                 if user_Option == "1":
-                    showUser()
+                    showUserList()
             
                 # Option 2: join the chatroom
                 elif user_Option == "2":

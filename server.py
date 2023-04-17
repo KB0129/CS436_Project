@@ -14,15 +14,20 @@ server.bind((host, port))
 server.listen(3)
 
 # put the clients, nicknames on list
-
 clients = []
 nicknames = []
-user_data=[]
+addresses =[]
+ports = []
 
 # send message to all clients on the server
 def broadcast(message):
     for client in clients:
         client.send(message)
+
+def userList(client, n, a, p):
+    user_info = str(n) +' is using address: '+ str(a) + ' with port:'+str(p) +'\n'
+    client.send(user_info.encode('utf-8'))
+    client.close()
 
 # show the message to the all clients
 def handle(client):
@@ -60,10 +65,9 @@ def receive():
             client.send('nicknameError'.encode('ascii'))
             client.close()
         else:
+            # pass the user list
             if nickname == 'LIST':
-                user_info = str(counter)+'. '+ str(nickname) +' is using address: '+ str(address[1]) + ' with port:'+str(port)
-                client.send(user_info.encode('ascii'))
-                client.close()
+                userList(client, nicknames, addresses, ports)
             print(f"Connection with {str(address)}")
             counter+=1
             # recieve nickname and client from client.py python3 client.py
@@ -71,6 +75,8 @@ def receive():
             #nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
             clients.append(client) 
+            addresses.append(address[1])
+            ports.append(port)
             
             print(f'Server:{nickname} joined the chatroom.')
             broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
