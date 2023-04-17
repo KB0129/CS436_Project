@@ -10,6 +10,17 @@ def enter():
     global client 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('127.0.0.1', 18000))
+    client.send(nickname.encode())
+    while True:
+        message = client.recv(1024).decode('ascii') #REJECT OR CONNECTED RECIVE
+        print(message)
+        if(message == 'reject' or message == 'nicknameError'):
+            print("rejected")
+            client.close()
+            return False #CONNECTION SUCESS BUT THERE ARE NO MORE SEATS
+        else:
+            return True #CONNECTION SUCESS AND SEATS ARE AVAILAVLE
+
 
 
 # get message from server
@@ -17,17 +28,7 @@ def recieve():
     while True:
         try:
             message = client.recv(1024).decode('ascii')
-            if message == 'NICK':
-                client.send(nickname.encode('ascii'))
-                pass
-            # elif message == 'reject':
-            #     print("There is already 3 users")
-            #     print("Program finish, Bye")
-            #     client.shutdown(socket.SHUT_RDWR)
-            #     client.close()
-            #     return
-            else:
-                print(message)
+            print(message)
             if(chat_finished):
                 break
         except:
@@ -37,11 +38,29 @@ def recieve():
 
 # write function to send message to chatroom
 def write():
+    """
     while True:
         # message = f'{nickname}: {input("")}'
         message = input()
         if message.lower() == 'q':
             client.send(message.encode())
+        else:
+            new_message = f'{nickname}: {message}'
+            date_now = datetime.now().strftime("[%H:%M] ")
+            new_message = date_now + new_message
+            client.send(new_message.encode('ascii'))
+    """
+    global chat_finished 
+    chat_finished = False
+    recieve_thread = threading.Thread(target=recieve)
+    recieve_thread.start()
+    while True: # same as wrtie()
+        # message = f'{nickname}: {input("")}'
+        message = input()
+        if message.lower() == 'q':
+            client.send(message.encode())
+            chat_finished = True
+            break 
         else:
             new_message = f'{nickname}: {message}'
             date_now = datetime.now().strftime("[%H:%M] ")
@@ -65,23 +84,8 @@ def giveOption():
             
                 # Option 2: join the chatroom
                 elif user_Option == "2":
-                    enter()
-                    global chat_finished 
-                    chat_finished = False
-                    recieve_thread = threading.Thread(target=recieve)
-                    recieve_thread.start()
-                    while True: # same as wrtie()
-                        # message = f'{nickname}: {input("")}'
-                        message = input()
-                        if message.lower() == 'q':
-                            client.send(message.encode())
-                            chat_finished = True
-                            break 
-                        else:
-                            new_message = f'{nickname}: {message}'
-                            date_now = datetime.now().strftime("[%H:%M] ")
-                            new_message = date_now + new_message
-                            client.send(new_message.encode('ascii'))
+                    if(enter()):
+                        write()
 
                 # Option 3: quit the chatroom 
                 elif user_Option == "3":

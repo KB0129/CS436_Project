@@ -16,6 +16,7 @@ server.bind((host, port))
 server.listen(3)
 
 # put the clients, nicknames on list
+
 clients = []
 nicknames = []
 
@@ -46,19 +47,25 @@ def handle(client):
 
 # receive client from client.py 
 def receive():
+    counter = 0
     while True:
+        client, address = server.accept()
+        nickname = client.recv(1024).decode('ascii') 
         # server always accept client
-        if len(clients) > 3:
+        if counter > 3: 
             print("testing if this works")
             client.send('reject'.encode('ascii'))
-            break
-        else:    
-            client, address = server.accept()
+            client.close()
+        elif nickname in nicknames:
+            print("testing if this works2")
+            client.send('nicknameError'.encode('ascii'))
+            client.close()
+        else:
             print(f"Connection with {str(address)}")
-
+            counter+=1
         # recieve nickname and client from client.py python3 client.py
-            client.send('NICK'.encode('ascii'))
-            nickname = client.recv(1024).decode('ascii') 
+            client.send('CONNECTED'.encode('ascii'))
+            #nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
             clients.append(client) 
 
@@ -67,8 +74,10 @@ def receive():
 
             thread = threading.Thread(target=handle, args=(client, ))
             thread.start()
-            
 
+
+#enter -> 소켓연결 -> 서버단에서 인원이 꽉차면은 -> 리젝트를 보내고 -> CLOSE() -> 클라에서는 리젝을 받지 -> 
+                 #   -> 인원이 남는가 -> CONNECTED를 CLIENT로 보낸다 -> "NICK"을 클라에게 보내서 닉네임이 뭔지 물어본다.
 # start server program
 print("Sever is now on. Listening...")
 receive()
