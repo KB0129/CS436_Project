@@ -52,7 +52,6 @@ def receive():
             print("testing if this works")
             client.send('reject'.encode('ascii'))
             break
-            #clients.remove()
         else:    
             client, address = server.accept()
             print(f"Connection with {str(address)}")
@@ -68,7 +67,7 @@ def receive():
 
             thread = threading.Thread(target=handle, args=(client, ))
             thread.start()
-            count += 1
+            
 
 # start server program
 print("Sever is now on. Listening...")
