@@ -1,11 +1,11 @@
 import socket
 import threading
 import time
-import pickle
 from datetime import datetime
 
+
 # enter nickname
-def enter():
+def nameEnter():
     global nickname 
     nickname = input("Please enter a username: ")
     global client 
@@ -15,10 +15,22 @@ def enter():
     while True:
         message = client.recv(1024).decode('ascii') # recieve reject or connect 
         if(message == 'reject' or message == 'nicknameError'):
+            print("Chatroom is already full or Select different nickname.")
             client.close()
             return False #CONNECTION SUCESS BUT THERE ARE NO MORE SEATS
         else:
             return True #CONNECTION SUCESS AND SEATS ARE AVAILAVLE
+        
+def showUser():
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(('127.0.0.1', 18000))
+    client.send("LIST".encode())
+    time.sleep(0.8)
+    userList = client.recv(1024).decode('ascii')
+    print(userList)
+    client.close()
+
+
         
 def readFile():
     print("Now, we are gonna read the file.")
@@ -50,7 +62,6 @@ def recieve():
             else:
                 print(message)
         except:
-            print("An error occured!")
             client.close()
             break
 
@@ -82,19 +93,15 @@ def giveOption():
             if not user_Option.isspace():
             # Option 1: get the list of clients in the server
                 if user_Option == "1":
-                    print("Here is the list: ")
-                    time.sleep(0.8)
-                    serverSend = client.recv(1024)
-                    serverList = pickle.loads(serverSend)
+                    showUser()
             
                 # Option 2: join the chatroom
                 elif user_Option == "2":
-                    if(enter()):
+                    if(nameEnter()):
                         write()
 
                 # Option 3: quit the chatroom 
                 elif user_Option == "3":
-                    print("Program finish, Bye")
                     client.shutdown(socket.SHUT_RDWR)
                     client.close()
                     return

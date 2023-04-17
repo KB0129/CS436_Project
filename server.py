@@ -1,8 +1,5 @@
 import threading
 import socket
-from datetime import datetime
-import pickle
-
 
 host = '127.0.0.1' # local host, run the server on my computer
 port = 18000
@@ -63,6 +60,10 @@ def receive():
             client.send('nicknameError'.encode('ascii'))
             client.close()
         else:
+            if nickname == 'LIST':
+                user_info = str(counter)+'. '+ str(nickname) +' is using address: '+ str(address[1]) + ' with port:'+str(port)
+                client.send(user_info.encode('ascii'))
+                client.close()
             print(f"Connection with {str(address)}")
             counter+=1
             # recieve nickname and client from client.py python3 client.py
@@ -70,9 +71,6 @@ def receive():
             #nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
             clients.append(client) 
-            
-            user_info = str(counter)+'. '+ str(nickname) +' is using address: '+ str(address[1]) + ' with port:'+str(port)
-            print(user_info)
             
             print(f'Server:{nickname} joined the chatroom.')
             broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
