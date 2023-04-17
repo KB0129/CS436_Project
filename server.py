@@ -19,6 +19,7 @@ server.listen(3)
 
 clients = []
 nicknames = []
+addresses =[]
 
 # send message to all clients on the server
 def broadcast(message):
@@ -62,12 +63,17 @@ def receive():
             client.close()
         else:
             print(f"Connection with {str(address)}")
+            addresses.append(str(address))
             counter+=1
             # recieve nickname and client from client.py python3 client.py
             client.send('CONNECTED'.encode('ascii'))
             #nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
             clients.append(client) 
+
+            print(nicknames)
+            print(address)
+            print(counter)
 
             print(f'Server:{nickname} joined the chatroom.')
             broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
