@@ -35,6 +35,8 @@ def handle(client):
             if message == 'q':
                 clients.remove(client)
                 break
+            elif message == 'a':
+                client.send('file'.encode())
             else: 
                 broadcast(message.encode())
 
@@ -55,11 +57,9 @@ def receive():
         nickname = client.recv(1024).decode('ascii') 
         # server always accept client
         if counter >= 3: 
-            print("testing if this works")
             client.send('reject'.encode('ascii'))
             client.close()
         elif nickname in nicknames:
-            print("testing if this works2")
             client.send('nicknameError'.encode('ascii'))
             client.close()
         else:
@@ -74,8 +74,6 @@ def receive():
             user_info = str(counter)+'. '+ str(nickname) +' is using address: '+ str(address[1]) + ' with port:'+str(port)
             print(user_info)
             
-            
-
             print(f'Server:{nickname} joined the chatroom.')
             broadcast(f'Server: {nickname} joined the chatroom.'.encode('ascii')) # show who join the chatroom
 

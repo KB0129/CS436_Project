@@ -19,17 +19,36 @@ def enter():
             return False #CONNECTION SUCESS BUT THERE ARE NO MORE SEATS
         else:
             return True #CONNECTION SUCESS AND SEATS ARE AVAILAVLE
+        
+def readFile():
+    print("Now, we are gonna read the file.")
+    file_name = input("Please enter the file path and name: ")
+    with open(file_name) as f:
+        lines = f.readlines()
+        chatWrite(lines)
+    f.close()
+    print(lines)
+    return lines
+    
 
-
+def chatWrite(message):
+    new_message = f'{nickname}: {message}'
+    date_now = datetime.now().strftime("[%H:%M] ")
+    new_message = date_now + new_message
+    client.send(new_message.encode('ascii'))
 
 # get message from server
 def recieve():
     while True:
         try:
             message = client.recv(1024).decode('ascii')
-            print(message)
             if(chat_finished):
                 break
+            elif message == 'file':
+                readFile()
+                chatWrite(readFile())
+            else:
+                print(message)
         except:
             print("An error occured!")
             client.close()
@@ -42,17 +61,16 @@ def write():
     recieve_thread = threading.Thread(target=recieve)
     recieve_thread.start()
     while True: # same as wrtie()
-        # message = f'{nickname}: {input("")}'
         message = input()
         if message.lower() == 'q':
             client.send(message.encode())
             chat_finished = True
             break 
         else:
-            new_message = f'{nickname}: {message}'
-            date_now = datetime.now().strftime("[%H:%M] ")
-            new_message = date_now + new_message
-            client.send(new_message.encode('ascii'))
+            if message.lower() == 'a':
+                client.send(message.encode())
+            else: 
+                chatWrite(message)
 
 # give options to user
 def giveOption():    
