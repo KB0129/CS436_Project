@@ -20,7 +20,8 @@ def nameEnter():
             return False #CONNECTION SUCESS BUT THERE ARE NO MORE SEATS
         else:
             return True #CONNECTION SUCESS AND SEATS ARE AVAILAVLE
-        
+
+# show the users and their information in chatroom
 def showUserList():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('127.0.0.1', 18000))
@@ -29,9 +30,10 @@ def showUserList():
     userList = client.recv(1024).decode('ascii')
     print(userList)
     client.close()
-        
+
+# read the user input file 
 def readFile():
-    print("Now, we are gonna read the file.")
+    print("Enter to read file.")
     file_name = input("Please enter the file path and name: ")
     with open(file_name) as f:
         lines = f.readlines()
@@ -39,8 +41,8 @@ def readFile():
     f.close()
     print(lines)
     return lines
-    
 
+# includes message datetime and name
 def chatWrite(message):
     new_message = f'{nickname}: {message}'
     date_now = datetime.now().strftime("[%H:%M] ")

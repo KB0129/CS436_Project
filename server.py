@@ -13,7 +13,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen(3)
 
-# put the clients, nicknames on list
+# put the client, nickname, IP address and port on the list
 clients = []
 nicknames = []
 addresses =[]
