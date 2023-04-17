@@ -52,7 +52,7 @@ def receive():
         client, address = server.accept()
         nickname = client.recv(1024).decode('ascii') 
         # server always accept client
-        if counter > 3: 
+        if counter >= 3: 
             print("testing if this works")
             client.send('reject'.encode('ascii'))
             client.close()
