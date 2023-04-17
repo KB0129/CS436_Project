@@ -4,6 +4,7 @@ import time
 import pickle
 from datetime import datetime
 
+# enter nickname
 def enter():
     global nickname 
     nickname = input("Please enter a username: ")
@@ -12,10 +13,8 @@ def enter():
     client.connect(('127.0.0.1', 18000))
     client.send(nickname.encode())
     while True:
-        message = client.recv(1024).decode('ascii') #REJECT OR CONNECTED RECIVE
-        print(message)
+        message = client.recv(1024).decode('ascii') # recieve reject or connect 
         if(message == 'reject' or message == 'nicknameError'):
-            print("rejected")
             client.close()
             return False #CONNECTION SUCESS BUT THERE ARE NO MORE SEATS
         else:
@@ -38,18 +37,6 @@ def recieve():
 
 # write function to send message to chatroom
 def write():
-    """
-    while True:
-        # message = f'{nickname}: {input("")}'
-        message = input()
-        if message.lower() == 'q':
-            client.send(message.encode())
-        else:
-            new_message = f'{nickname}: {message}'
-            date_now = datetime.now().strftime("[%H:%M] ")
-            new_message = date_now + new_message
-            client.send(new_message.encode('ascii'))
-    """
     global chat_finished 
     chat_finished = False
     recieve_thread = threading.Thread(target=recieve)
@@ -104,18 +91,8 @@ def giveOption():
             return
 
 def main_function():
-    giveOption()
-    
-
-        
-     
+    giveOption()         
 # start client program
 main_function()
-
-
-# recieve_thread = threading.Thread(target=recieve)
-# recieve_thread.start()
-# write_thread = threading.Thread(target=write)
-# write_thread.start()
 
     

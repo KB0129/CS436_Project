@@ -63,7 +63,7 @@ def receive():
         else:
             print(f"Connection with {str(address)}")
             counter+=1
-        # recieve nickname and client from client.py python3 client.py
+            # recieve nickname and client from client.py python3 client.py
             client.send('CONNECTED'.encode('ascii'))
             #nickname = client.recv(1024).decode('ascii') 
             nicknames.append(nickname)
@@ -76,8 +76,8 @@ def receive():
             thread.start()
 
 
-#enter -> 소켓연결 -> 서버단에서 인원이 꽉차면은 -> 리젝트를 보내고 -> CLOSE() -> 클라에서는 리젝을 받지 -> 
-                 #   -> 인원이 남는가 -> CONNECTED를 CLIENT로 보낸다 -> "NICK"을 클라에게 보내서 닉네임이 뭔지 물어본다.
+#enter -> Connect Socket ->  If user is full -> Send Reject -> Server: close() -> Client: get reject -
+#      ->                -> If user is not full -> Send Connect -> Server: thread() -> Client: input nickname
 # start server program
 print("Sever is now on. Listening...")
 receive()
