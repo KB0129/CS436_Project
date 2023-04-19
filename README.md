@@ -1,2 +1,3 @@
-# CS436_Project
-Project in Introduction to Network Programming
+# CS436 Project
+Python Socket programming. 
+Chat room using Python socket libray with powerful function.
